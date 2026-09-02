@@ -1,17 +1,17 @@
 const STORAGE_KEY = 'crm_intermedio_data';
 
 const STAGES = [
-  { key: 'nuevo', label: 'Nuevo', color: '#64748b' },
-  { key: 'contactado', label: 'Contactado', color: '#2563eb' },
-  { key: 'propuesta', label: 'Propuesta', color: '#d97706' },
-  { key: 'ganado', label: 'Ganado', color: '#16a34a' },
-  { key: 'perdido', label: 'Perdido', color: '#dc2626' },
+  { key: 'nuevo', label: 'Nuevo', color: '#8a7565' },
+  { key: 'contactado', label: 'Contactado', color: '#b64211' },
+  { key: 'propuesta', label: 'Propuesta', color: '#df3314' },
+  { key: 'ganado', label: 'Ganado', color: '#3f6b28' },
+  { key: 'perdido', label: 'Perdido', color: '#b11e1b' },
 ];
 
 const TAGS = [
-  { key: 'vip', label: 'VIP', color: '#7c3aed' },
-  { key: 'frio', label: 'Frío', color: '#0891b2' },
-  { key: 'caliente', label: 'Caliente', color: '#dc2626' },
+  { key: 'vip', label: 'VIP', color: '#92400e' },
+  { key: 'frio', label: 'Frío', color: '#8a7565' },
+  { key: 'caliente', label: 'Caliente', color: '#b11e1b' },
 ];
 
 const ACTIVITY_TYPES = [
