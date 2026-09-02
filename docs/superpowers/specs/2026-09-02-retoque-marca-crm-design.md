@@ -72,12 +72,16 @@ paleta cálida en vez del azul/verde/ámbar genérico actual.
 
 Se añade a los tres niveles el botón de tema (sol/luna) en la topbar y la
 lógica de `data-theme` sobre `<html>` + persistencia en `localStorage`,
-replicando el patrón de Panel-Web:
+replicando el patrón de Panel-Web.
 
-- **Básico**: si el usuario nunca ha tocado el botón, se usa el tema del
-  sistema operativo (`prefers-color-scheme`).
-- **Intermedio y completo**: por defecto siempre arrancan en claro,
-  independientemente del tema del sistema.
+**Corrección tras revisar el código fuente de Panel-Web** (el README de
+`panel-basico` sugiere que por defecto sigue el tema del sistema operativo,
+pero el script real en `index.html` de los tres niveles de Panel-Web ignora
+`prefers-color-scheme` y arranca siempre en claro salvo que el usuario ya
+haya elegido oscuro antes). Replicamos el comportamiento real del código,
+no el que describe ese README desactualizado: **los tres niveles de CRM
+arrancan siempre en claro por defecto**, hasta que el usuario pulsa el
+botón de tema explícitamente.
 
 ## 3. Icono de marca
 
