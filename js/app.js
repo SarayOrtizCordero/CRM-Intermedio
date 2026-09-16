@@ -232,7 +232,7 @@ function renderKanban() {
         return `
           <div class="kanban-card" draggable="true" data-id="${d.id}">
             <h4>${escapeHtml(d.title)}</h4>
-            <p class="card-company">${contact ? escapeHtml(contact.service || 'Sin servicio') : 'Sin paciente'}</p>
+            <p class="card-company">${contact ? escapeHtml(contact.name) : 'Sin paciente'}</p>
             <p class="card-value">${formatCurrency(d.value)}</p>
             <div class="card-footer">
               ${pending ? `<span class="card-task-badge ${overdue ? 'overdue' : ''}">📅 ${formatDate(pending.dueDate)}</span>` : '<span></span>'}
@@ -358,7 +358,7 @@ function renderContactsTable() {
       <tr class="clickable" data-open-contact="${c.id}">
         <td class="cell-name">${escapeHtml(c.name)}</td>
         <td class="cell-muted">${escapeHtml(c.service || '—')}</td>
-        <td class="cell-muted">${sourceLabel(c.source)}</td>
+        <td class="cell-muted">${escapeHtml(sourceLabel(c.source))}</td>
         <td class="cell-muted">${escapeHtml(c.email || '—')}</td>
         <td class="cell-muted">${escapeHtml(c.phone || '—')}</td>
         <td><div class="tag-chips-row">${tagsHtml || '—'}</div></td>
@@ -428,7 +428,8 @@ function renderAll() {
 /* ---------- Deal modal ---------- */
 
 function populateDealContactSelect() {
-  els.dealContact.innerHTML = data.contacts.map((c) => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+  els.dealContact.innerHTML = '<option value="" disabled selected>Selecciona un paciente</option>'
+    + data.contacts.map((c) => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
 }
 
 function renderDealTasks(dealId) {

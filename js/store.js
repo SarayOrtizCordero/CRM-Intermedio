@@ -102,7 +102,7 @@ function loadData() {
   }
   try {
     const parsed = JSON.parse(raw);
-    if (!parsed.contacts || !parsed.deals) throw new Error('shape');
+    if (!parsed.contacts || !parsed.deals || parsed.companies) throw new Error('shape');
     return parsed;
   } catch {
     const seeded = seedData();
