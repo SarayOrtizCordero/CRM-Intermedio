@@ -570,7 +570,7 @@ function renderContactDeals(contactId) {
         <span class="status-badge" style="background:${stage.color}22;color:${stage.color}">${stage.label}</span>
       </div>
     `;
-  }).join('') : '<p class="empty-text">Sin tratos</p>';
+  }).join('') : '<p class="empty-text">Sin consultas</p>';
 }
 
 function openContactModal(id) {
