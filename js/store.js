@@ -1,11 +1,13 @@
 const STORAGE_KEY = 'crm_intermedio_data';
 
 const STAGES = [
-  { key: 'nuevo', label: 'Nuevo', color: '#8a7565' },
+  { key: 'nuevo', label: 'Nuevo contacto', color: '#8a7565' },
+  { key: 'recibida', label: 'Consulta recibida', color: '#a9754a' },
   { key: 'contactado', label: 'Contactado', color: '#b64211' },
-  { key: 'propuesta', label: 'Propuesta', color: '#df3314' },
-  { key: 'ganado', label: 'Ganado', color: '#3f6b28' },
-  { key: 'perdido', label: 'Perdido', color: '#b11e1b' },
+  { key: 'interesado', label: 'Interesado', color: '#df3314' },
+  { key: 'turno', label: 'Turno reservado', color: '#eda100' },
+  { key: 'atendido', label: 'Atendido', color: '#3f6b28' },
+  { key: 'seguimiento', label: 'Seguimiento', color: '#6b8a52' },
 ];
 
 const TAGS = [
@@ -43,64 +45,52 @@ function daysFromNow(n) {
 }
 
 function seedData() {
-  const companies = [
-    { id: uid(), name: 'Textiles Rioja', sector: 'Textil', website: 'textilesrioja.es', notes: 'Cliente habitual, pedidos recurrentes.', createdAt: daysFromNow(-60) },
-    { id: uid(), name: 'Ferretería Prats', sector: 'Ferretería', website: 'ferreteriaprats.com', notes: '', createdAt: daysFromNow(-50) },
-    { id: uid(), name: 'Moda Levante S.L.', sector: 'Moda', website: 'modalevante.es', notes: 'Dos interlocutores habituales.', createdAt: daysFromNow(-90) },
-    { id: uid(), name: 'Distribuciones Norte', sector: 'Logística', website: 'distnorte.com', notes: '', createdAt: daysFromNow(-40) },
-    { id: uid(), name: 'Grupo Herrero', sector: 'Servicios', website: 'grupoherrero.es', notes: 'Cuenta estratégica.', createdAt: daysFromNow(-120) },
-    { id: uid(), name: 'Salas Hostelería', sector: 'Hostelería', website: 'salashosteleria.com', notes: '', createdAt: daysFromNow(-30) },
-    { id: uid(), name: 'Campos & Asociados', sector: 'Legal', website: 'camposasociados.es', notes: '', createdAt: daysFromNow(-200) },
-    { id: uid(), name: 'Montes Logística', sector: 'Logística', website: 'monteslogistica.com', notes: 'Optó por otro proveedor en la última operación.', createdAt: daysFromNow(-70) },
-  ];
-  const byName = (n) => companies.find((c) => c.name === n).id;
-
   const contacts = [
-    { id: uid(), name: 'Marta Gil', companyId: byName('Textiles Rioja'), position: 'Responsable de Compras', email: 'marta.gil@textilesrioja.es', phone: '+34 611 223 344', tags: ['caliente'], createdAt: daysFromNow(-58) },
-    { id: uid(), name: 'Javier Prats', companyId: byName('Ferretería Prats'), position: 'Gerente', email: 'javier@ferreteriaprats.com', phone: '+34 622 334 455', tags: [], createdAt: daysFromNow(-49) },
-    { id: uid(), name: 'Ana Belén Ruiz', companyId: byName('Moda Levante S.L.'), position: 'Directora Comercial', email: 'ab.ruiz@modalevante.es', phone: '+34 633 445 566', tags: ['vip'], createdAt: daysFromNow(-88) },
-    { id: uid(), name: 'Rubén Ibáñez', companyId: byName('Moda Levante S.L.'), position: 'Compras', email: 'ruben.ibanez@modalevante.es', phone: '+34 634 445 567', tags: [], createdAt: daysFromNow(-20) },
-    { id: uid(), name: 'Carlos Fuentes', companyId: byName('Distribuciones Norte'), position: 'Responsable de Logística', email: 'carlos.fuentes@distnorte.com', phone: '+34 644 556 677', tags: [], createdAt: daysFromNow(-38) },
-    { id: uid(), name: 'Lucía Herrero', companyId: byName('Grupo Herrero'), position: 'CEO', email: 'lucia@grupoherrero.es', phone: '+34 655 667 788', tags: ['vip', 'caliente'], createdAt: daysFromNow(-118) },
-    { id: uid(), name: 'Pedro Salas', companyId: byName('Salas Hostelería'), position: 'Propietario', email: 'pedro.salas@salashosteleria.com', phone: '+34 666 778 899', tags: ['frio'], createdAt: daysFromNow(-28) },
-    { id: uid(), name: 'Elena Campos', companyId: byName('Campos & Asociados'), position: 'Socia', email: 'elena.campos@camposasociados.es', phone: '+34 677 889 900', tags: ['vip'], createdAt: daysFromNow(-198) },
-    { id: uid(), name: 'David Montes', companyId: byName('Montes Logística'), position: 'Director', email: 'david@monteslogistica.com', phone: '+34 688 990 011', tags: [], createdAt: daysFromNow(-68) },
+    { id: uid(), name: 'Marta Gil', service: 'Limpieza dental', source: 'whatsapp', email: 'marta.gil@email.com', phone: '+34 611 223 344', tags: ['caliente'], createdAt: daysFromNow(-58) },
+    { id: uid(), name: 'Javier Prats', service: 'Revisión general', source: 'telefono', email: 'javier.prats@email.com', phone: '+34 622 334 455', tags: [], createdAt: daysFromNow(-49) },
+    { id: uid(), name: 'Ana Belén Ruiz', service: 'Ortodoncia invisible', source: 'instagram', email: 'ab.ruiz@email.com', phone: '+34 633 445 566', tags: ['vip'], createdAt: daysFromNow(-88) },
+    { id: uid(), name: 'Rubén Ibáñez', service: 'Revisión de ortodoncia', source: 'whatsapp', email: 'ruben.ibanez@email.com', phone: '+34 634 445 567', tags: [], createdAt: daysFromNow(-20) },
+    { id: uid(), name: 'Carlos Fuentes', service: 'Consulta general', source: 'formulario', email: 'carlos.fuentes@email.com', phone: '+34 644 556 677', tags: [], createdAt: daysFromNow(-38) },
+    { id: uid(), name: 'Lucía Herrero', service: 'Sesión de fisioterapia', source: 'web', email: 'lucia.herrero@email.com', phone: '+34 655 667 788', tags: ['vip', 'caliente'], createdAt: daysFromNow(-118) },
+    { id: uid(), name: 'Pedro Salas', service: 'Peeling facial', source: 'instagram', email: 'pedro.salas@email.com', phone: '+34 666 778 899', tags: ['frio'], createdAt: daysFromNow(-28) },
+    { id: uid(), name: 'Elena Campos', service: 'Sesión de botox', source: 'whatsapp', email: 'elena.campos@email.com', phone: '+34 677 889 900', tags: ['vip'], createdAt: daysFromNow(-198) },
+    { id: uid(), name: 'David Montes', service: 'Blanqueamiento dental', source: 'whatsapp', email: 'david.montes@email.com', phone: '+34 688 990 011', tags: [], createdAt: daysFromNow(-68) },
   ];
   const byContactName = (n) => contacts.find((c) => c.name === n).id;
 
   const deals = [
-    { id: uid(), title: 'Renovación pedido textil', companyId: byName('Textiles Rioja'), contactId: byContactName('Marta Gil'), value: 4200, stage: 'nuevo', createdAt: daysFromNow(-3) },
-    { id: uid(), title: 'Suministro de herramientas', companyId: byName('Ferretería Prats'), contactId: byContactName('Javier Prats'), value: 1800, stage: 'nuevo', createdAt: daysFromNow(-2) },
-    { id: uid(), title: 'Colección otoño-invierno', companyId: byName('Moda Levante S.L.'), contactId: byContactName('Ana Belén Ruiz'), value: 12500, stage: 'contactado', createdAt: daysFromNow(-5) },
-    { id: uid(), title: 'Pedido complementario', companyId: byName('Moda Levante S.L.'), contactId: byContactName('Rubén Ibáñez'), value: 2300, stage: 'nuevo', createdAt: daysFromNow(-1) },
-    { id: uid(), title: 'Ampliación de almacén', companyId: byName('Distribuciones Norte'), contactId: byContactName('Carlos Fuentes'), value: 8600, stage: 'contactado', createdAt: daysFromNow(-6) },
-    { id: uid(), title: 'Consultoría anual', companyId: byName('Grupo Herrero'), contactId: byContactName('Lucía Herrero'), value: 15000, stage: 'propuesta', createdAt: daysFromNow(-9) },
-    { id: uid(), title: 'Mantelería de temporada', companyId: byName('Salas Hostelería'), contactId: byContactName('Pedro Salas'), value: 3100, stage: 'propuesta', createdAt: daysFromNow(-7) },
-    { id: uid(), title: 'Auditoría legal anual', companyId: byName('Campos & Asociados'), contactId: byContactName('Elena Campos'), value: 6400, stage: 'ganado', createdAt: daysFromNow(-14) },
-    { id: uid(), title: 'Transporte de flota', companyId: byName('Montes Logística'), contactId: byContactName('David Montes'), value: 5200, stage: 'perdido', createdAt: daysFromNow(-16) },
+    { id: uid(), title: 'Consulta inicial — Limpieza dental', contactId: byContactName('Marta Gil'), value: 4200, stage: 'nuevo', createdAt: daysFromNow(-3) },
+    { id: uid(), title: 'Consulta inicial — Revisión general', contactId: byContactName('Javier Prats'), value: 1800, stage: 'nuevo', createdAt: daysFromNow(-2) },
+    { id: uid(), title: 'Valoración de ortodoncia invisible', contactId: byContactName('Ana Belén Ruiz'), value: 12500, stage: 'contactado', createdAt: daysFromNow(-5) },
+    { id: uid(), title: 'Revisión de ortodoncia', contactId: byContactName('Rubén Ibáñez'), value: 2300, stage: 'nuevo', createdAt: daysFromNow(-1) },
+    { id: uid(), title: 'Consulta general de seguimiento', contactId: byContactName('Carlos Fuentes'), value: 8600, stage: 'contactado', createdAt: daysFromNow(-6) },
+    { id: uid(), title: 'Plan de fisioterapia', contactId: byContactName('Lucía Herrero'), value: 15000, stage: 'interesado', createdAt: daysFromNow(-9) },
+    { id: uid(), title: 'Peeling facial — sesión inicial', contactId: byContactName('Pedro Salas'), value: 3100, stage: 'interesado', createdAt: daysFromNow(-7) },
+    { id: uid(), title: 'Sesión de botox', contactId: byContactName('Elena Campos'), value: 6400, stage: 'atendido', createdAt: daysFromNow(-14) },
+    { id: uid(), title: 'Blanqueamiento dental', contactId: byContactName('David Montes'), value: 5200, stage: 'seguimiento', createdAt: daysFromNow(-16) },
   ];
   const byDealTitle = (t) => deals.find((d) => d.title === t).id;
 
   const tasks = [
-    { id: uid(), dealId: byDealTitle('Renovación pedido textil'), title: 'Llamar para confirmar pedido', dueDate: daysFromNow(-2), completed: false, createdAt: daysFromNow(-3) },
-    { id: uid(), dealId: byDealTitle('Suministro de herramientas'), title: 'Revisar condiciones del contrato', dueDate: daysFromNow(6), completed: false, createdAt: daysFromNow(-2) },
-    { id: uid(), dealId: byDealTitle('Colección otoño-invierno'), title: 'Reunión de seguimiento', dueDate: daysFromNow(2), completed: false, createdAt: daysFromNow(-5) },
-    { id: uid(), dealId: byDealTitle('Consultoría anual'), title: 'Enviar propuesta actualizada', dueDate: daysFromNow(1), completed: false, createdAt: daysFromNow(-4) },
-    { id: uid(), dealId: byDealTitle('Mantelería de temporada'), title: 'Confirmar fecha de entrega', dueDate: daysFromNow(-1), completed: false, createdAt: daysFromNow(-3) },
-    { id: uid(), dealId: byDealTitle('Pedido complementario'), title: 'Primera llamada de contacto', dueDate: daysFromNow(4), completed: false, createdAt: daysFromNow(-1) },
-    { id: uid(), dealId: byDealTitle('Auditoría legal anual'), title: 'Enviar factura final', dueDate: daysFromNow(-8), completed: true, createdAt: daysFromNow(-14) },
+    { id: uid(), dealId: byDealTitle('Consulta inicial — Limpieza dental'), title: 'Llamar para confirmar la cita', dueDate: daysFromNow(-2), completed: false, createdAt: daysFromNow(-3) },
+    { id: uid(), dealId: byDealTitle('Consulta inicial — Revisión general'), title: 'Revisar historial médico previo', dueDate: daysFromNow(6), completed: false, createdAt: daysFromNow(-2) },
+    { id: uid(), dealId: byDealTitle('Valoración de ortodoncia invisible'), title: 'Sesión de seguimiento de ortodoncia', dueDate: daysFromNow(2), completed: false, createdAt: daysFromNow(-5) },
+    { id: uid(), dealId: byDealTitle('Plan de fisioterapia'), title: 'Enviar presupuesto de fisioterapia actualizado', dueDate: daysFromNow(1), completed: false, createdAt: daysFromNow(-4) },
+    { id: uid(), dealId: byDealTitle('Peeling facial — sesión inicial'), title: 'Confirmar fecha de la sesión de peeling', dueDate: daysFromNow(-1), completed: false, createdAt: daysFromNow(-3) },
+    { id: uid(), dealId: byDealTitle('Revisión de ortodoncia'), title: 'Primera llamada de contacto', dueDate: daysFromNow(4), completed: false, createdAt: daysFromNow(-1) },
+    { id: uid(), dealId: byDealTitle('Sesión de botox'), title: 'Enviar factura de la sesión', dueDate: daysFromNow(-8), completed: true, createdAt: daysFromNow(-14) },
   ];
 
   const activities = [
-    { id: uid(), dealId: byDealTitle('Renovación pedido textil'), type: 'llamada', text: 'Primer contacto telefónico, muestran interés en ampliar el pedido habitual.', date: daysFromNow(-3) },
-    { id: uid(), dealId: byDealTitle('Renovación pedido textil'), type: 'nota', text: 'Cliente de más de 3 años, buen historial de pago.', date: daysFromNow(-3) },
-    { id: uid(), dealId: byDealTitle('Colección otoño-invierno'), type: 'email', text: 'Enviado catálogo de la colección otoño-invierno.', date: daysFromNow(-5) },
-    { id: uid(), dealId: byDealTitle('Colección otoño-invierno'), type: 'reunion', text: 'Reunión en showroom, muy interesados en 3 referencias.', date: daysFromNow(-2) },
-    { id: uid(), dealId: byDealTitle('Consultoría anual'), type: 'nota', text: 'Quieren renovar la consultoría con alcance ampliado.', date: daysFromNow(-6) },
-    { id: uid(), dealId: byDealTitle('Auditoría legal anual'), type: 'reunion', text: 'Firma del contrato en sus oficinas.', date: daysFromNow(-14) },
+    { id: uid(), dealId: byDealTitle('Consulta inicial — Limpieza dental'), type: 'llamada', text: 'Primer contacto telefónico, pregunta por precio de limpieza dental.', date: daysFromNow(-3) },
+    { id: uid(), dealId: byDealTitle('Consulta inicial — Limpieza dental'), type: 'nota', text: 'Paciente habitual, buen historial de asistencia.', date: daysFromNow(-3) },
+    { id: uid(), dealId: byDealTitle('Valoración de ortodoncia invisible'), type: 'email', text: 'Enviada información sobre ortodoncia invisible.', date: daysFromNow(-5) },
+    { id: uid(), dealId: byDealTitle('Valoración de ortodoncia invisible'), type: 'reunion', text: 'Consulta presencial, muy interesada en empezar tratamiento.', date: daysFromNow(-2) },
+    { id: uid(), dealId: byDealTitle('Plan de fisioterapia'), type: 'nota', text: 'Quiere ampliar el plan de fisioterapia a 2 sesiones semanales.', date: daysFromNow(-6) },
+    { id: uid(), dealId: byDealTitle('Sesión de botox'), type: 'reunion', text: 'Sesión de botox realizada en consulta.', date: daysFromNow(-14) },
   ];
 
-  return { companies, contacts, deals, tasks, activities };
+  return { contacts, deals, tasks, activities };
 }
 
 function loadData() {
@@ -112,7 +102,7 @@ function loadData() {
   }
   try {
     const parsed = JSON.parse(raw);
-    if (!parsed.companies || !parsed.contacts || !parsed.deals) throw new Error('shape');
+    if (!parsed.contacts || !parsed.deals) throw new Error('shape');
     return parsed;
   } catch {
     const seeded = seedData();
