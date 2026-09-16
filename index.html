@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRM Intermedio · Demo</title>
+  <title>Melray Intermedio · Demo</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <script>
     // Aplica el tema guardado antes de pintar, para evitar un parpadeo del
@@ -38,8 +38,8 @@
           </svg>
         </span>
         <div>
-          <h1>CRM Intermedio</h1>
-          <p class="subtitle-tag">Empresas, tratos con valor, tareas y actividad</p>
+          <h1>Melray Intermedio</h1>
+          <p class="subtitle-tag">Consultas con valor, pacientes, tareas y actividad</p>
         </div>
       </div>
       <div class="topbar-actions">
@@ -64,15 +64,17 @@
             <div class="toolbar-filters">
               <div class="search-input-wrap">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" id="search-input" placeholder="Buscar trato, empresa o contacto...">
+                <input type="text" id="search-input" placeholder="Buscar consulta o paciente...">
               </div>
               <select id="filter-stage">
                 <option value="">Todas las etapas</option>
-                <option value="nuevo">Nuevo</option>
+                <option value="nuevo">Nuevo contacto</option>
+                <option value="recibida">Consulta recibida</option>
                 <option value="contactado">Contactado</option>
-                <option value="propuesta">Propuesta</option>
-                <option value="ganado">Ganado</option>
-                <option value="perdido">Perdido</option>
+                <option value="interesado">Interesado</option>
+                <option value="turno">Turno reservado</option>
+                <option value="atendido">Atendido</option>
+                <option value="seguimiento">Seguimiento</option>
               </select>
               <select id="sort-select">
                 <option value="recent">Más recientes</option>
@@ -83,13 +85,12 @@
             <div class="view-toggle">
               <button type="button" data-view="kanban" class="active">Pipeline</button>
               <button type="button" data-view="tabla">Tabla</button>
-              <button type="button" data-view="empresas">Empresas</button>
-              <button type="button" data-view="contactos">Contactos</button>
+              <button type="button" data-view="contactos">Pacientes</button>
             </div>
             <div class="toolbar-actions">
               <button id="toolbar-add-btn" class="btn-primary btn-icon-text">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                <span id="toolbar-add-label">Nuevo trato</span>
+                <span id="toolbar-add-label">Nueva consulta</span>
               </button>
             </div>
           </div>
@@ -102,9 +103,8 @@
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Trato</th>
-                  <th>Empresa</th>
-                  <th>Contacto</th>
+                  <th>Consulta</th>
+                  <th>Paciente</th>
                   <th>Valor</th>
                   <th>Etapa</th>
                   <th>Tareas</th>
@@ -115,29 +115,13 @@
             </table>
           </div>
 
-          <div class="data-table-wrap hidden" id="companies-table-wrap">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Empresa</th>
-                  <th>Sector</th>
-                  <th>Contactos</th>
-                  <th>Tratos</th>
-                  <th>Valor total</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="companies-table-body"></tbody>
-            </table>
-          </div>
-
           <div class="data-table-wrap hidden" id="contacts-table-wrap">
             <table class="data-table">
               <thead>
                 <tr>
                   <th>Nombre</th>
-                  <th>Empresa</th>
-                  <th>Cargo</th>
+                  <th>Servicio</th>
+                  <th>Origen</th>
                   <th>Email</th>
                   <th>Teléfono</th>
                   <th>Etiquetas</th>
@@ -174,13 +158,13 @@
     </div>
   </main>
 
-  <!-- Modal: Trato -->
+  <!-- Modal: Consulta -->
   <div id="deal-modal" class="modal hidden">
     <div class="modal-content modal-wide">
       <div class="modal-header">
-        <h2 id="deal-modal-title">Nuevo trato</h2>
+        <h2 id="deal-modal-title">Nueva consulta</h2>
         <div class="btn-icon-text">
-          <button type="button" id="deal-delete-btn" class="icon-btn danger hidden" title="Eliminar trato">
+          <button type="button" id="deal-delete-btn" class="icon-btn danger hidden" title="Eliminar consulta">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
           </button>
           <button type="button" class="modal-close" data-close-modal aria-label="Cerrar">
@@ -190,19 +174,11 @@
       </div>
       <form id="deal-form">
         <input type="hidden" id="deal-id">
-        <label for="deal-title">Título del trato</label>
-        <input type="text" id="deal-title" required placeholder="Ej: Renovación pedido textil">
+        <label for="deal-title">Título de la consulta</label>
+        <input type="text" id="deal-title" required placeholder="Ej: Consulta inicial — blanqueamiento dental">
 
-        <div class="field-row">
-          <div>
-            <label for="deal-company">Empresa</label>
-            <select id="deal-company" required></select>
-          </div>
-          <div>
-            <label for="deal-contact">Contacto</label>
-            <select id="deal-contact"></select>
-          </div>
-        </div>
+        <label for="deal-contact">Paciente</label>
+        <select id="deal-contact" required></select>
 
         <div class="field-row">
           <div>
@@ -212,18 +188,20 @@
           <div>
             <label for="deal-stage">Etapa</label>
             <select id="deal-stage">
-              <option value="nuevo">Nuevo</option>
+              <option value="nuevo">Nuevo contacto</option>
+              <option value="recibida">Consulta recibida</option>
               <option value="contactado">Contactado</option>
-              <option value="propuesta">Propuesta</option>
-              <option value="ganado">Ganado</option>
-              <option value="perdido">Perdido</option>
+              <option value="interesado">Interesado</option>
+              <option value="turno">Turno reservado</option>
+              <option value="atendido">Atendido</option>
+              <option value="seguimiento">Seguimiento</option>
             </select>
           </div>
         </div>
 
         <div class="modal-buttons">
           <button type="button" class="btn-secondary" data-close-modal>Cancelar</button>
-          <button type="submit" class="btn-primary">Guardar trato</button>
+          <button type="submit" class="btn-primary">Guardar consulta</button>
         </div>
       </form>
 
@@ -256,65 +234,13 @@
     </div>
   </div>
 
-  <!-- Modal: Empresa -->
-  <div id="company-modal" class="modal hidden">
-    <div class="modal-content modal-wide">
-      <div class="modal-header">
-        <h2 id="company-modal-title">Nueva empresa</h2>
-        <div class="btn-icon-text">
-          <button type="button" id="company-delete-btn" class="icon-btn danger hidden" title="Eliminar empresa">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-          </button>
-          <button type="button" class="modal-close" data-close-modal aria-label="Cerrar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
-          </button>
-        </div>
-      </div>
-      <form id="company-form">
-        <input type="hidden" id="company-id">
-        <label for="company-name">Nombre</label>
-        <input type="text" id="company-name" required placeholder="Ej: Textiles Rioja">
-
-        <div class="field-row">
-          <div>
-            <label for="company-sector">Sector</label>
-            <input type="text" id="company-sector" placeholder="Ej: Textil">
-          </div>
-          <div>
-            <label for="company-website">Web</label>
-            <input type="text" id="company-website" placeholder="ejemplo.com">
-          </div>
-        </div>
-
-        <label for="company-notes">Notas</label>
-        <textarea id="company-notes" rows="2" placeholder="Notas sobre la empresa..."></textarea>
-
-        <div class="modal-buttons">
-          <button type="button" class="btn-secondary" data-close-modal>Cancelar</button>
-          <button type="submit" class="btn-primary">Guardar empresa</button>
-        </div>
-      </form>
-
-      <div id="company-detail-sections" class="hidden">
-        <div class="detail-section">
-          <p class="detail-section-title">Contactos</p>
-          <div class="related-list" id="company-contacts-list"></div>
-        </div>
-        <div class="detail-section">
-          <p class="detail-section-title">Tratos</p>
-          <div class="related-list" id="company-deals-list"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Contacto -->
+  <!-- Modal: Paciente -->
   <div id="contact-modal" class="modal hidden">
     <div class="modal-content modal-wide">
       <div class="modal-header">
-        <h2 id="contact-modal-title">Nuevo contacto</h2>
+        <h2 id="contact-modal-title">Nuevo paciente</h2>
         <div class="btn-icon-text">
-          <button type="button" id="contact-delete-btn" class="icon-btn danger hidden" title="Eliminar contacto">
+          <button type="button" id="contact-delete-btn" class="icon-btn danger hidden" title="Eliminar paciente">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
           </button>
           <button type="button" class="modal-close" data-close-modal aria-label="Cerrar">
@@ -329,21 +255,25 @@
 
         <div class="field-row">
           <div>
-            <label for="contact-company">Empresa</label>
-            <select id="contact-company">
-              <option value="">Sin empresa</option>
-            </select>
+            <label for="contact-service">Servicio de interés</label>
+            <input type="text" id="contact-service" placeholder="Ej: Limpieza dental">
           </div>
           <div>
-            <label for="contact-position">Cargo</label>
-            <input type="text" id="contact-position" placeholder="Ej: Responsable de Compras">
+            <label for="contact-source">Origen</label>
+            <select id="contact-source">
+              <option value="whatsapp">WhatsApp</option>
+              <option value="instagram">Instagram</option>
+              <option value="web">Web</option>
+              <option value="telefono">Teléfono</option>
+              <option value="formulario">Formulario</option>
+            </select>
           </div>
         </div>
 
         <div class="field-row">
           <div>
             <label for="contact-email">Email</label>
-            <input type="email" id="contact-email" placeholder="ejemplo@empresa.com">
+            <input type="email" id="contact-email" placeholder="ejemplo@email.com">
           </div>
           <div>
             <label for="contact-phone">Teléfono</label>
@@ -356,18 +286,20 @@
 
         <div class="modal-buttons">
           <button type="button" class="btn-secondary" data-close-modal>Cancelar</button>
-          <button type="submit" class="btn-primary">Guardar contacto</button>
+          <button type="submit" class="btn-primary">Guardar paciente</button>
         </div>
       </form>
 
       <div id="contact-detail-sections" class="hidden">
         <div class="detail-section">
-          <p class="detail-section-title">Tratos asociados</p>
+          <p class="detail-section-title">Consultas asociadas</p>
           <div class="related-list" id="contact-deals-list"></div>
         </div>
       </div>
     </div>
   </div>
+
+  <div id="toast-container" class="toast-container"></div>
 
   <script src="js/store.js"></script>
   <script src="js/app.js"></script>
